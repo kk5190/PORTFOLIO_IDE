@@ -1,13 +1,13 @@
 
-import React from 'react';
-import { FileNode, Theme } from '../types';
+import React, { useState } from 'react';
+import { FileNode, Theme, ActivityTab } from '../types';
 import { THEMES } from '../constants';
 
 interface SidebarProps {
   files: FileNode[];
   activeFileId: string | null;
   onFileSelect: (fileId: string) => void;
-  activeActivityTab: string;
+  activeActivityTab: ActivityTab;
   currentTheme: Theme;
   onThemeSelect: (theme: Theme) => void;
 }
@@ -20,116 +20,172 @@ const Sidebar: React.FC<SidebarProps> = ({
   currentTheme,
   onThemeSelect
 }) => {
-  if (activeActivityTab === 'settings') {
-    return (
-      <aside className="w-64 bg-sidebar-dark flex flex-col border-r border-black/10 select-none font-display flex-shrink-0 hidden md:flex">
-        <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50 flex justify-between items-center">
-          <span>Settings</span>
-        </div>
-        <div className="flex-1 overflow-y-auto no-scrollbar">
-          <div className="px-4 py-2 text-sm font-bold opacity-80">Theme Selection</div>
-          <div className="flex flex-col gap-1 mt-2">
-            {THEMES.map((theme) => {
-              const isActive = currentTheme.id === theme.id;
-              return (
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredFiles = files.filter(file => 
+    file.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const renderContent = () => {
+    switch (activeActivityTab) {
+      case 'settings':
+        return (
+          <>
+            <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50">Settings</div>
+            <div className="px-4 py-2 text-sm font-bold opacity-80">Color Theme</div>
+            <div className="flex flex-col gap-1 mt-2">
+              {THEMES.map((theme) => (
                 <div
                   key={theme.id}
                   onClick={() => onThemeSelect(theme)}
                   className={`flex items-center px-4 py-2 gap-3 text-sm cursor-pointer transition-all ${
-                    isActive
+                    currentTheme.id === theme.id
                       ? 'bg-primary/20 border-l-2 border-primary'
-                      : 'hover:bg-black/5 dark:hover:bg-white/5 border-l-2 border-transparent opacity-60 hover:opacity-100'
+                      : 'hover:bg-black/5 dark:hover:bg-white/5 border-l-2 border-transparent opacity-60'
                   }`}
-                  style={{ color: isActive ? 'var(--theme-text)' : undefined }}
                 >
-                  <div 
-                    className="w-4 h-4 rounded-full border border-black/10 shadow-sm" 
-                    style={{ backgroundColor: theme.colors.primary }}
-                  ></div>
-                  <span className="font-medium">{theme.name}</span>
+                  <div className="w-4 h-4 rounded-full border border-black/10" style={{ backgroundColor: theme.colors.primary }}></div>
+                  <span>{theme.name}</span>
                 </div>
-              );
-            })}
-          </div>
-          <div className="px-4 py-4 text-xs opacity-40 border-t border-black/5 mt-4">
-            Changing the theme updates all UI elements and syntax highlighting variables.
-          </div>
-        </div>
-      </aside>
-    );
-  }
+              ))}
+            </div>
+          </>
+        );
 
-  const srcFiles = files.filter(f => f.path.includes('src'));
-  const rootFiles = files.filter(f => !f.path.includes('src'));
+      case 'git':
+        return (
+          <>
+            <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50">Source Control</div>
+            <div className="px-4 py-2 text-sm">
+              <div className="flex items-center justify-between opacity-80 mb-4">
+                <span className="font-bold">Changes</span>
+                <span className="bg-primary/20 px-2 py-0.5 rounded text-[10px]">3</span>
+              </div>
+              <div className="flex flex-col gap-2">
+                {['Modified: portfolio.config.ts', 'Added: new-project.png', 'Deleted: old-bio.txt'].map(change => (
+                  <div key={change} className="flex items-center gap-2 text-xs opacity-60">
+                    <span className="material-icons-outlined text-xs">edit</span>
+                    <span>{change}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        );
+
+      case 'search':
+        return (
+          <>
+            <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50">Search</div>
+            <div className="px-4 mb-4">
+              <div className="relative">
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search files by name..." 
+                  className="w-full bg-black/10 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded px-2 py-1 text-sm outline-none focus:border-primary pr-8"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2 top-1.5 opacity-40 hover:opacity-100"
+                  >
+                    <span className="material-icons-outlined text-xs">close</span>
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto no-scrollbar">
+              {searchQuery && (
+                <div className="px-4 py-1 text-[10px] uppercase opacity-40 font-bold mb-1">
+                  {filteredFiles.length} Results
+                </div>
+              )}
+              <div className="flex flex-col">
+                {filteredFiles.map((file) => (
+                  <div
+                    key={file.id}
+                    onClick={() => onFileSelect(file.id)}
+                    className={`flex items-center px-4 py-2 gap-3 text-sm cursor-pointer transition-colors ${
+                      activeFileId === file.id ? 'bg-primary/20 border-r-2 border-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <span className={`material-icons-outlined text-lg ${file.iconColor}`}>{file.icon}</span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="truncate font-medium">{file.name}</span>
+                      <span className="text-[10px] opacity-40 truncate">{file.path.replace('PORTFOLIO > ', '')}</span>
+                    </div>
+                  </div>
+                ))}
+                {searchQuery && filteredFiles.length === 0 && (
+                  <div className="px-4 py-8 text-center text-xs opacity-40">
+                    No files found matching "{searchQuery}"
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        );
+
+      default:
+        const srcFiles = files.filter(f => f.path.includes('src'));
+        const rootFiles = files.filter(f => !f.path.includes('src'));
+        return (
+          <>
+            <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50 flex justify-between items-center">
+              <span>Explorer</span>
+              <span className="material-icons-outlined text-sm">more_horiz</span>
+            </div>
+            <div className="flex items-center px-4 py-1 gap-1 text-sm font-bold opacity-80">
+              <span className="material-icons-outlined text-sm">expand_more</span>
+              <span>PORTFOLIO</span>
+            </div>
+            <div className="pl-4">
+              <div className="flex items-center px-4 py-1 gap-1 text-sm opacity-60">
+                <span className="material-icons-outlined text-sm">expand_more</span>
+                <span className="material-icons-outlined text-sm text-primary/70">folder</span>
+                <span>src</span>
+              </div>
+              <div className="pl-6 border-l border-black/10 dark:border-white/5">
+                {srcFiles.map((file) => (
+                  <div
+                    key={file.id}
+                    onClick={() => onFileSelect(file.id)}
+                    className={`flex items-center px-4 py-1 gap-2 text-sm cursor-pointer transition-colors ${
+                      activeFileId === file.id ? 'bg-primary/20 border-r-2 border-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <span className={`material-icons-outlined text-sm ${file.iconColor}`}>{file.icon}</span>
+                    <span>{file.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4">
+              {rootFiles.map((file) => (
+                <div
+                  key={file.id}
+                  onClick={() => onFileSelect(file.id)}
+                  className={`flex items-center px-8 py-1 gap-2 text-sm cursor-pointer transition-colors ${
+                    activeFileId === file.id ? 'bg-primary/20 border-r-2 border-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
+                  }`}
+                >
+                  <span className={`material-icons-outlined text-sm ${file.iconColor}`}>{file.icon}</span>
+                  <span>{file.name}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        );
+    }
+  };
 
   return (
-    <aside className="w-64 bg-sidebar-dark flex flex-col border-r border-black/10 select-none font-display flex-shrink-0 hidden md:flex">
-      <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50 flex justify-between items-center">
-        <span>Explorer</span>
-        <span className="material-icons-outlined text-sm">more_horiz</span>
-      </div>
-
-      <div className="flex-1 overflow-y-auto no-scrollbar">
-        <div className="flex items-center px-4 py-1 gap-1 text-sm font-bold opacity-80">
-          <span className="material-icons-outlined text-sm">expand_more</span>
-          <span>PORTFOLIO_PROJECT</span>
-        </div>
-
-        <div className="pl-4">
-          <div className="flex items-center px-4 py-1 gap-1 text-sm opacity-60">
-            <span className="material-icons-outlined text-sm">expand_more</span>
-            <span className="material-icons-outlined text-sm text-primary/70">folder</span>
-            <span>src</span>
-          </div>
-
-          <div className="pl-6 border-l border-black/5 dark:border-white/5">
-            {srcFiles.map((file) => (
-              <div
-                key={file.id}
-                onClick={() => onFileSelect(file.id)}
-                className={`flex items-center px-4 py-1 gap-2 text-sm cursor-pointer transition-colors ${
-                  activeFileId === file.id
-                    ? 'bg-primary/20 border-r-2 border-primary'
-                    : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
-                }`}
-              >
-                {file.type === 'markdown' && <span className="material-icons-outlined text-sm text-orange-400">description</span>}
-                {file.type === 'json' && <span className="material-symbols-outlined text-sm text-yellow-400">code</span>}
-                {file.type === 'yaml' && <span className="material-icons-outlined text-sm text-primary">list_alt</span>}
-                {file.type === 'settings' && <span className="material-icons-outlined text-sm text-blue-400">terminal</span>}
-                <span>{file.name}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center px-4 py-1 gap-1 text-sm opacity-40 mt-2">
-            <span className="material-icons-outlined text-sm">chevron_right</span>
-            <span className="material-icons-outlined text-sm">folder</span>
-            <span>config</span>
-          </div>
-          <div className="flex items-center px-4 py-1 gap-1 text-sm opacity-40">
-            <span className="material-icons-outlined text-sm">chevron_right</span>
-            <span className="material-icons-outlined text-sm">folder</span>
-            <span>dist</span>
-          </div>
-        </div>
-
-        <div className="mt-4">
-          {rootFiles.map((file) => (
-             <div
-                key={file.id}
-                onClick={() => onFileSelect(file.id)}
-                className={`flex items-center px-8 py-1 gap-2 text-sm cursor-pointer transition-colors ${
-                  activeFileId === file.id
-                    ? 'bg-primary/20 border-r-2 border-primary'
-                    : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
-                }`}
-              >
-                <span className={`material-icons-outlined text-sm ${file.iconColor}`}>{file.icon}</span>
-                <span>{file.name}</span>
-              </div>
-          ))}
-        </div>
+    <aside className="w-64 bg-sidebar-dark flex flex-col border-r border-black/10 dark:border-white/5 select-none font-display flex-shrink-0 hidden lg:flex">
+      <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col">
+        {renderContent()}
       </div>
     </aside>
   );

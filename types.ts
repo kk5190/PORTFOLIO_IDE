@@ -1,5 +1,5 @@
 
-export type FileType = 'markdown' | 'json' | 'yaml' | 'settings';
+export type FileType = 'markdown' | 'json' | 'yaml' | 'settings' | 'javascript';
 
 export interface FileNode {
   id: string;
@@ -9,12 +9,6 @@ export interface FileNode {
   iconColor: string;
   content: string;
   path: string;
-}
-
-export interface IDEState {
-  openFileIds: string[];
-  activeFileId: string | null;
-  isSidebarOpen: boolean;
 }
 
 export interface ThemeColors {
@@ -29,6 +23,7 @@ export interface ThemeColors {
   keyword: string;
   variable: string;
   type: string;
+  border: string;
 }
 
 export interface Theme {
@@ -36,3 +31,5 @@ export interface Theme {
   name: string;
   colors: ThemeColors;
 }
+
+export type ActivityTab = 'explorer' | 'search' | 'git' | 'terminal' | 'settings';
