@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>John Doe | Senior Software Engineer Portfolio</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#bd93f9", // Dracula Lavender
+            "background-light": "#282a36",
+            "background-dark": "#1e1f29",
+            "sidebar-dark": "#191a21",
+            "activity-bar": "#15161d",
+            "editor-bg": "#282a36",
+            "dracula-pink": "#ff79c6",
+            "dracula-cyan": "#8be9fd",
+            "dracula-green": "#50fa7b",
+            "dracula-yellow": "#f1fa8c",
+            "dracula-orange": "#ffb86c",
+            "dracula-comment": "#6272a4"
+          },
+          fontFamily: {
+            "display": ["IBM Plex Sans", "sans-serif"],
+            "mono": ["Fira Code", "monospace"]
+          },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      body {
+        @apply font-display bg-background-dark text-[#f8f8f2] overflow-hidden;
+      }
+    }
+    
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #44475a;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6272a4;
+    }
+
+    .code-line:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
