@@ -1,5 +1,110 @@
 
-import { FileNode } from './types';
+import { FileNode, Theme } from './types';
+
+export const THEMES: Theme[] = [
+  {
+    id: 'dracula',
+    name: 'Dracula',
+    colors: {
+      background: '#1e1f29',
+      sidebar: '#191a21',
+      activityBar: '#15161d',
+      primary: '#bd93f9',
+      editorBg: '#282a36',
+      text: '#f8f8f2',
+      comment: '#6272a4',
+      string: '#f1fa8c',
+      keyword: '#ff79c6',
+      variable: '#8be9fd',
+      type: '#50fa7b'
+    }
+  },
+  {
+    id: 'one-dark',
+    name: 'One Dark Pro',
+    colors: {
+      background: '#21252b',
+      sidebar: '#282c34',
+      activityBar: '#1e2227',
+      primary: '#61afef',
+      editorBg: '#282c34',
+      text: '#abb2bf',
+      comment: '#5c6370',
+      string: '#98c379',
+      keyword: '#c678dd',
+      variable: '#e06c75',
+      type: '#d19a66'
+    }
+  },
+  {
+    id: 'github-light',
+    name: 'GitHub Light',
+    colors: {
+      background: '#ffffff',
+      sidebar: '#f6f8fa',
+      activityBar: '#24292f',
+      primary: '#0969da',
+      editorBg: '#ffffff',
+      text: '#24292f',
+      comment: '#6e7781',
+      string: '#0a3069',
+      keyword: '#cf222e',
+      variable: '#953800',
+      type: '#116329'
+    }
+  },
+  {
+    id: 'solarized-light',
+    name: 'Solarized Light',
+    colors: {
+      background: '#fdf6e3',
+      sidebar: '#eee8d5',
+      activityBar: '#073642',
+      primary: '#268bd2',
+      editorBg: '#fdf6e3',
+      text: '#657b83',
+      comment: '#93a1a1',
+      string: '#2aa198',
+      keyword: '#859900',
+      variable: '#268bd2',
+      type: '#b58900'
+    }
+  },
+  {
+    id: 'monokai',
+    name: 'Monokai',
+    colors: {
+      background: '#1e1f1c',
+      sidebar: '#272822',
+      activityBar: '#141411',
+      primary: '#f92672',
+      editorBg: '#272822',
+      text: '#f8f8f2',
+      comment: '#75715e',
+      string: '#e6db74',
+      keyword: '#f92672',
+      variable: '#fd971f',
+      type: '#66d9ef'
+    }
+  },
+  {
+    id: 'github-dark',
+    name: 'GitHub Dark',
+    colors: {
+      background: '#0d1117',
+      sidebar: '#010409',
+      activityBar: '#010409',
+      primary: '#58a6ff',
+      editorBg: '#0d1117',
+      text: '#c9d1d9',
+      comment: '#8b949e',
+      string: '#a5d6ff',
+      keyword: '#ff7b72',
+      variable: '#ffa657',
+      type: '#79c0ff'
+    }
+  }
+];
 
 export const INITIAL_FILES: FileNode[] = [
   {

@@ -16,3 +16,23 @@ export interface IDEState {
   activeFileId: string | null;
   isSidebarOpen: boolean;
 }
+
+export interface ThemeColors {
+  background: string;
+  sidebar: string;
+  activityBar: string;
+  primary: string;
+  editorBg: string;
+  text: string;
+  comment: string;
+  string: string;
+  keyword: string;
+  variable: string;
+  type: string;
+}
+
+export interface Theme {
+  id: string;
+  name: string;
+  colors: ThemeColors;
+}

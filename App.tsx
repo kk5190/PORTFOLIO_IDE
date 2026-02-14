@@ -1,15 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ActivityBar from './components/ActivityBar';
 import Sidebar from './components/Sidebar';
 import CodeRenderer from './components/CodeRenderer';
-import { INITIAL_FILES } from './constants';
-import { FileNode } from './types';
+import { INITIAL_FILES, THEMES } from './constants';
+import { FileNode, Theme } from './types';
 
 const App: React.FC = () => {
   const [openFileIds, setOpenFileIds] = useState<string[]>(['about', 'experience']);
   const [activeFileId, setActiveFileId] = useState<string | null>('experience');
   const [activeActivityTab, setActiveActivityTab] = useState('explorer');
+  const [currentTheme, setCurrentTheme] = useState<Theme>(THEMES[0]);
 
   const activeFile = INITIAL_FILES.find(f => f.id === activeFileId) || INITIAL_FILES[0];
 
@@ -18,6 +19,7 @@ const App: React.FC = () => {
       setOpenFileIds(prev => [...prev, id]);
     }
     setActiveFileId(id);
+    setActiveActivityTab('explorer');
   };
 
   const handleCloseTab = (e: React.MouseEvent, id: string) => {
@@ -29,10 +31,40 @@ const App: React.FC = () => {
     }
   };
 
+  const themeVariables = useMemo(() => {
+    return {
+      '--theme-bg': currentTheme.colors.background,
+      '--theme-sidebar': currentTheme.colors.sidebar,
+      '--theme-activity-bar': currentTheme.colors.activityBar,
+      '--theme-primary': currentTheme.colors.primary,
+      '--theme-editor-bg': currentTheme.colors.editorBg,
+      '--theme-text': currentTheme.colors.text,
+      '--theme-comment': currentTheme.colors.comment,
+      '--theme-string': currentTheme.colors.string,
+      '--theme-keyword': currentTheme.colors.keyword,
+      '--theme-variable': currentTheme.colors.variable,
+      '--theme-type': currentTheme.colors.type,
+    } as React.CSSProperties;
+  }, [currentTheme]);
+
   return (
-    <div className="bg-background-dark h-screen flex flex-col select-none">
+    <div className="h-screen flex flex-col select-none transition-all duration-300" style={{ ...themeVariables, backgroundColor: 'var(--theme-bg)', color: 'var(--theme-text)' }}>
+      <style>{`
+        .bg-background-dark { background-color: var(--theme-bg) !important; }
+        .bg-sidebar-dark { background-color: var(--theme-sidebar) !important; }
+        .bg-activity-bar { background-color: var(--theme-activity-bar) !important; }
+        .bg-primary { background-color: var(--theme-primary) !important; }
+        .text-primary { color: var(--theme-primary) !important; }
+        .border-primary { border-color: var(--theme-primary) !important; }
+        /* Ensure status bar text contrast */
+        .text-background-dark { color: var(--theme-bg) !important; }
+        /* Generic border color based on theme brightness */
+        .border-theme { border-color: rgba(0,0,0,0.1); }
+        .dark .border-theme { border-color: rgba(255,255,255,0.05); }
+      `}</style>
+      
       {/* OS-like Header */}
-      <header className="h-8 bg-sidebar-dark border-b border-white/5 flex items-center px-4 justify-between text-xs text-white/40">
+      <header className="h-8 bg-sidebar-dark border-b border-black/5 dark:border-white/5 flex items-center px-4 justify-between text-xs opacity-60">
         <div className="flex items-center gap-2">
           <img 
             alt="Logo" 
@@ -63,18 +95,19 @@ const App: React.FC = () => {
       <div className="flex flex-1 overflow-hidden">
         <ActivityBar activeTab={activeActivityTab} setActiveTab={setActiveActivityTab} />
         
-        {activeActivityTab === 'explorer' && (
-          <Sidebar 
-            files={INITIAL_FILES} 
-            activeFileId={activeFileId} 
-            onFileSelect={handleFileSelect} 
-          />
-        )}
+        <Sidebar 
+          files={INITIAL_FILES} 
+          activeFileId={activeFileId} 
+          onFileSelect={handleFileSelect} 
+          activeActivityTab={activeActivityTab}
+          currentTheme={currentTheme}
+          onThemeSelect={setCurrentTheme}
+        />
 
         {/* Editor Area */}
         <main className="flex-1 flex flex-col min-w-0">
           {/* Tabs */}
-          <nav className="h-9 bg-sidebar-dark flex overflow-x-auto border-b border-white/5 no-scrollbar flex-shrink-0">
+          <nav className="h-9 bg-sidebar-dark flex overflow-x-auto border-b border-black/10 dark:border-white/5 no-scrollbar flex-shrink-0">
             {openFileIds.map(fid => {
               const file = INITIAL_FILES.find(f => f.id === fid);
               if (!file) return null;
@@ -82,10 +115,11 @@ const App: React.FC = () => {
               return (
                 <div
                   key={fid}
-                  onClick={() => setActiveFileId(fid)}
-                  className={`flex items-center px-4 gap-2 h-full text-sm cursor-pointer border-r border-white/5 transition-colors whitespace-nowrap ${
-                    isActive ? 'bg-background-dark border-t-2 border-primary text-white' : 'text-white/40 hover:bg-white/5'
+                  onClick={() => handleFileSelect(fid)}
+                  className={`flex items-center px-4 gap-2 h-full text-sm cursor-pointer border-r border-black/10 dark:border-white/5 transition-all whitespace-nowrap ${
+                    isActive ? 'bg-background-dark border-t-2 border-primary' : 'opacity-50 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5'
                   }`}
+                  style={{ color: isActive ? 'var(--theme-text)' : undefined }}
                 >
                   {file.type === 'markdown' && <span className="material-icons-outlined text-xs text-orange-400">description</span>}
                   {file.type === 'json' && <span className="material-symbols-outlined text-xs text-yellow-400">code</span>}
@@ -94,7 +128,7 @@ const App: React.FC = () => {
                   <span>{file.name}</span>
                   <span 
                     onClick={(e) => handleCloseTab(e, fid)}
-                    className="material-icons-outlined text-[10px] ml-2 text-white/30 hover:text-white hover:bg-white/10 p-0.5 rounded"
+                    className="material-icons-outlined text-[10px] ml-2 opacity-30 hover:opacity-100 hover:bg-black/10 dark:hover:bg-white/10 p-0.5 rounded"
                   >
                     close
                   </span>
@@ -105,12 +139,12 @@ const App: React.FC = () => {
 
           {/* Breadcrumbs */}
           {activeFile && (
-            <div className="h-6 bg-background-dark px-4 flex items-center gap-1 text-[11px] text-white/30 border-b border-white/5 flex-shrink-0">
-              <span className="hover:text-white cursor-pointer">PORTFOLIO_PROJECT</span>
+            <div className="h-6 bg-background-dark px-4 flex items-center gap-1 text-[11px] opacity-40 border-b border-black/5 dark:border-white/5 flex-shrink-0">
+              <span className="hover:underline cursor-pointer">PORTFOLIO_PROJECT</span>
               <span className="material-icons-outlined text-[10px]">chevron_right</span>
-              <span className="hover:text-white cursor-pointer">src</span>
+              <span className="hover:underline cursor-pointer">src</span>
               <span className="material-icons-outlined text-[10px]">chevron_right</span>
-              <div className="flex items-center gap-1 text-white/60">
+              <div className="flex items-center gap-1 opacity-100" style={{ color: 'var(--theme-text)' }}>
                 <span className={`material-icons-outlined text-[10px] ${activeFile.iconColor}`}>{activeFile.icon}</span>
                 {activeFile.name}
               </div>
@@ -121,7 +155,7 @@ const App: React.FC = () => {
           {activeFile ? (
             <CodeRenderer file={activeFile} />
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center opacity-20 pointer-events-none">
+            <div className="flex-1 flex flex-col items-center justify-center opacity-10 pointer-events-none">
                 <span className="material-icons-outlined text-9xl">code</span>
                 <p className="text-xl font-display mt-4">Select a file to view content</p>
             </div>
@@ -130,7 +164,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Status Bar */}
-      <footer className="h-6 bg-primary text-background-dark flex items-center justify-between px-3 text-[11px] font-semibold flex-shrink-0">
+      <footer className="h-6 bg-primary text-background-dark flex items-center justify-between px-3 text-[11px] font-bold flex-shrink-0">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1 hover:bg-black/10 px-2 h-full cursor-pointer transition-colors">
             <span className="material-icons-outlined text-sm">account_tree</span>
@@ -146,9 +180,8 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="hidden sm:block hover:bg-black/10 px-2 h-full cursor-pointer transition-colors">Ln 1, Col 1</div>
-          <div className="hidden sm:block hover:bg-black/10 px-2 h-full cursor-pointer transition-colors">Spaces: 2</div>
-          <div className="hover:bg-black/10 px-2 h-full cursor-pointer transition-colors uppercase">UTF-8</div>
+          <div className="hidden sm:block hover:bg-black/10 px-2 h-full cursor-pointer transition-colors uppercase">Theme: {currentTheme.name}</div>
+          <div className="hidden sm:block hover:bg-black/10 px-2 h-full cursor-pointer transition-colors uppercase">UTF-8</div>
           <div className="hover:bg-black/10 px-2 h-full cursor-pointer transition-colors uppercase">{activeFile?.type || 'plain'}</div>
           <div className="flex items-center gap-1 hover:bg-black/10 px-2 h-full cursor-pointer transition-colors">
             <span className="material-icons-outlined text-sm">notifications</span>

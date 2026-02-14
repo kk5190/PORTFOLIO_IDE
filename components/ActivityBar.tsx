@@ -44,7 +44,10 @@ const ActivityBar: React.FC<ActivityBarProps> = ({ activeTab, setActiveTab }) =>
         {bottomItems.map((item) => (
           <div
             key={item.id}
-            className="text-white/30 hover:text-white/70 cursor-pointer transition-colors"
+            onClick={() => setActiveTab(item.id)}
+            className={`relative cursor-pointer transition-colors group ${
+              activeTab === item.id ? 'text-white border-l-2 border-primary pl-1 -ml-1' : 'text-white/40 hover:text-white'
+            }`}
             title={item.label}
           >
             <span className="material-icons-outlined text-2xl">{item.icon}</span>
