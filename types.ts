@@ -29,6 +29,7 @@ export interface ThemeColors {
 export interface Theme {
   id: string;
   name: string;
+  isLight?: boolean;
   colors: ThemeColors;
 }
 

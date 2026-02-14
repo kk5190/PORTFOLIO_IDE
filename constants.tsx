@@ -42,6 +42,7 @@ export const THEMES: Theme[] = [
   {
     id: 'github-light',
     name: 'GitHub Light',
+    isLight: true,
     colors: {
       background: '#ffffff',
       sidebar: '#f6f8fa',
@@ -54,7 +55,45 @@ export const THEMES: Theme[] = [
       keyword: '#cf222e',
       variable: '#953800',
       type: '#116329',
+      border: 'rgba(0,0,0,0.08)'
+    }
+  },
+  {
+    id: 'solarized-light',
+    name: 'Solarized Light',
+    isLight: true,
+    colors: {
+      background: '#fdf6e3',
+      sidebar: '#eee8d5',
+      activityBar: '#073642',
+      primary: '#268bd2',
+      editorBg: '#fdf6e3',
+      text: '#586e75',
+      comment: '#93a1a1',
+      string: '#859900',
+      keyword: '#859900',
+      variable: '#268bd2',
+      type: '#cb4b16',
       border: 'rgba(0,0,0,0.1)'
+    }
+  },
+  {
+    id: 'quiet-light',
+    name: 'Quiet Light',
+    isLight: true,
+    colors: {
+      background: '#f2f2f2',
+      sidebar: '#e8e8e8',
+      activityBar: '#c4c4c4',
+      primary: '#705697',
+      editorBg: '#f2f2f2',
+      text: '#333333',
+      comment: '#aaaaaa',
+      string: '#448c27',
+      keyword: '#705697',
+      variable: '#7a3e9d',
+      type: '#aa3731',
+      border: 'rgba(0,0,0,0.05)'
     }
   }
 ];

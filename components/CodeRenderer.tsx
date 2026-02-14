@@ -51,7 +51,7 @@ const CodeRenderer: React.FC<CodeRendererProps> = ({ file, isPreview }) => {
         const indent = line.search(/\S/);
         const indentStyle = indent > 0 ? `style="margin-left: ${indent * 0.5}rem"` : '';
 
-        if (trimmed.startsWith('# ')) return `<h1 key=${i} class="text-3xl font-bold mb-4 mt-8 pb-2 border-b border-white/10">${trimmed.replace('# ', '')}</h1>`;
+        if (trimmed.startsWith('# ')) return `<h1 key=${i} class="text-3xl font-bold mb-4 mt-8 pb-2 border-b border-theme">${trimmed.replace('# ', '')}</h1>`;
         if (trimmed.startsWith('## ')) return `<h2 key=${i} class="text-2xl font-bold mb-3 mt-6">${trimmed.replace('## ', '')}</h2>`;
         if (trimmed.startsWith('### ')) return `<h3 key=${i} class="text-xl font-semibold mb-2 mt-4 text-primary">${trimmed.replace('### ', '')}</h3>`;
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
@@ -61,7 +61,7 @@ const CodeRenderer: React.FC<CodeRendererProps> = ({ file, isPreview }) => {
           const parts = trimmed.split('. ');
           return `<li key=${i} class="mb-1 opacity-90 list-none flex gap-2" ${indentStyle}><span class="text-primary font-bold">${parts[0]}.</span> <span>${parts.slice(1).join('. ')}</span></li>`;
         }
-        if (trimmed === '---') return `<hr key=${i} class="my-8 border-white/5" />`;
+        if (trimmed === '---') return `<hr key=${i} class="my-8 border-theme" />`;
         if (!trimmed) return '<div class="h-4"></div>';
         
         return `<p key=${i} class="mb-4 leading-relaxed opacity-80" ${indentStyle}>${trimmed}</p>`;
@@ -69,9 +69,10 @@ const CodeRenderer: React.FC<CodeRendererProps> = ({ file, isPreview }) => {
       .join('');
 
     return (
-      <div className="flex-1 overflow-y-auto bg-background-dark p-8 md:p-12 font-display scroll-smooth">
+      <div className="flex-1 overflow-y-auto bg-background-dark p-8 md:p-12 font-display scroll-smooth transition-colors duration-300">
         <div 
-          className="max-w-3xl mx-auto prose prose-invert"
+          className="max-w-3xl mx-auto prose dark:prose-invert"
+          style={{ color: 'var(--theme-text)' }}
           dangerouslySetInnerHTML={{ __html: previewContent }}
         />
       </div>
@@ -94,7 +95,7 @@ const CodeRenderer: React.FC<CodeRendererProps> = ({ file, isPreview }) => {
         ))}
       </div>
       
-      <div className="w-24 border-l border-white/5 opacity-20 hidden lg:block select-none overflow-hidden flex-shrink-0">
+      <div className="w-24 border-l border-theme opacity-20 hidden lg:block select-none overflow-hidden flex-shrink-0">
         <div className="h-full w-full py-4 px-1 flex flex-col gap-1 pointer-events-none">
           {lines.slice(0, 40).map((_, i) => (
             <div 
@@ -107,7 +108,7 @@ const CodeRenderer: React.FC<CodeRendererProps> = ({ file, isPreview }) => {
             />
           ))}
         </div>
-        <div className="absolute top-4 right-0 w-24 h-48 bg-white/5 border-y border-white/10"></div>
+        <div className="absolute top-4 right-0 w-24 h-48 bg-black/5 dark:bg-white/5 border-y border-theme"></div>
       </div>
     </div>
   );

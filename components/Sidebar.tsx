@@ -112,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       activeFileId === file.id ? 'bg-primary/20 border-r-2 border-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
                     }`}
                   >
-                    <span className={`material-icons-outlined text-lg ${file.iconColor}`}>{file.icon}</span>
+                    <span className={`material-symbols-outlined text-lg ${file.iconColor}`}>{file.icon}</span>
                     <div className="flex flex-col min-w-0">
                       <span className="truncate font-medium">{file.name}</span>
                       <span className="text-[10px] opacity-40 truncate">{file.path.replace('PORTFOLIO > ', '')}</span>
@@ -138,44 +138,56 @@ const Sidebar: React.FC<SidebarProps> = ({
               <span>Explorer</span>
               <span className="material-icons-outlined text-sm">more_horiz</span>
             </div>
-            <div className="flex items-center px-4 py-1 gap-1 text-sm font-bold opacity-80">
-              <span className="material-icons-outlined text-sm">expand_more</span>
+            
+            <div className="flex items-center px-3 py-1 gap-1 text-[11px] font-bold opacity-80 cursor-default">
+              <span className="material-icons-outlined text-xs">expand_more</span>
               <span>PORTFOLIO</span>
             </div>
-            <div className="pl-4">
-              <div className="flex items-center px-4 py-1 gap-1 text-sm opacity-60">
-                <span className="material-icons-outlined text-sm">expand_more</span>
-                <span className="material-icons-outlined text-sm text-primary/70">folder</span>
-                <span>src</span>
+
+            <div className="flex flex-col">
+              {/* src folder */}
+              <div className="flex items-center px-5 py-1 gap-1.5 text-xs opacity-80 cursor-default">
+                <span className="material-icons-outlined text-[14px]">expand_more</span>
+                <span className="material-symbols-outlined text-[16px] text-primary/80">folder_open</span>
+                <span className="font-medium">src</span>
               </div>
-              <div className="pl-6 border-l border-black/10 dark:border-white/5">
+              
+              <div className="ml-[23px] border-l border-theme/20">
                 {srcFiles.map((file) => (
                   <div
                     key={file.id}
                     onClick={() => onFileSelect(file.id)}
-                    className={`flex items-center px-4 py-1 gap-2 text-sm cursor-pointer transition-colors ${
-                      activeFileId === file.id ? 'bg-primary/20 border-r-2 border-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
+                    className={`flex items-center pl-6 pr-4 py-1 gap-2.5 text-[13px] cursor-pointer transition-colors relative group ${
+                      activeFileId === file.id ? 'bg-primary/10 text-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
                     }`}
                   >
-                    <span className={`material-icons-outlined text-sm ${file.iconColor}`}>{file.icon}</span>
-                    <span>{file.name}</span>
+                    {activeFileId === file.id && (
+                      <div className="absolute left-0 w-0.5 h-full bg-primary"></div>
+                    )}
+                    <span className={`material-symbols-outlined text-[16px] ${file.iconColor}`}>{file.icon}</span>
+                    <span className="truncate">{file.name}</span>
                   </div>
                 ))}
               </div>
-            </div>
-            <div className="mt-4">
-              {rootFiles.map((file) => (
-                <div
-                  key={file.id}
-                  onClick={() => onFileSelect(file.id)}
-                  className={`flex items-center px-8 py-1 gap-2 text-sm cursor-pointer transition-colors ${
-                    activeFileId === file.id ? 'bg-primary/20 border-r-2 border-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
-                  }`}
-                >
-                  <span className={`material-icons-outlined text-sm ${file.iconColor}`}>{file.icon}</span>
-                  <span>{file.name}</span>
-                </div>
-              ))}
+
+              {/* root files */}
+              <div className="mt-0.5">
+                {rootFiles.map((file) => (
+                  <div
+                    key={file.id}
+                    onClick={() => onFileSelect(file.id)}
+                    className={`flex items-center px-9 py-1 gap-2.5 text-[13px] cursor-pointer transition-colors relative group ${
+                      activeFileId === file.id ? 'bg-primary/10 text-primary' : 'opacity-70 hover:bg-black/5 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    {activeFileId === file.id && (
+                      <div className="absolute left-0 w-0.5 h-full bg-primary"></div>
+                    )}
+                    <span className={`material-symbols-outlined text-[16px] ${file.iconColor}`}>{file.icon}</span>
+                    <span className="truncate">{file.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         );
@@ -183,7 +195,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-sidebar-dark flex flex-col border-r border-black/10 dark:border-white/5 select-none font-display flex-shrink-0 hidden lg:flex">
+    <aside className="w-64 bg-sidebar-dark flex flex-col border-r border-theme select-none font-display flex-shrink-0 hidden lg:flex">
       <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col">
         {renderContent()}
       </div>
