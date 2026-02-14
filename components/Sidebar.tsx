@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { FileNode, Theme, ActivityTab } from '../types';
 import { THEMES } from '../constants';
+import GitGraph from './organisms/GitGraph';
 
 interface SidebarProps {
   files: FileNode[];
@@ -54,23 +55,29 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       case 'git':
         return (
-          <>
+          <div className="flex flex-col h-full overflow-hidden">
             <div className="p-3 text-[11px] font-bold uppercase tracking-widest opacity-50">Source Control</div>
-            <div className="px-4 py-2 text-sm">
+            <div className="px-4 py-2 text-sm flex-shrink-0">
               <div className="flex items-center justify-between opacity-80 mb-4">
                 <span className="font-bold">Changes</span>
-                <span className="bg-primary/20 px-2 py-0.5 rounded text-[10px]">3</span>
+                <span className="bg-primary/20 px-2 py-0.5 rounded text-[10px] text-primary">3</span>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 mb-4">
                 {['Modified: portfolio.config.ts', 'Added: new-project.png', 'Deleted: old-bio.txt'].map(change => (
-                  <div key={change} className="flex items-center gap-2 text-xs opacity-60">
+                  <div key={change} className="flex items-center gap-2 text-xs opacity-60 hover:opacity-100 cursor-pointer">
                     <span className="material-icons-outlined text-xs">edit</span>
-                    <span>{change}</span>
+                    <span className="truncate">{change}</span>
                   </div>
                 ))}
               </div>
             </div>
-          </>
+            
+            {/* Divider */}
+            <div className="h-px bg-theme/10 mx-4 mb-2"></div>
+
+            {/* Git Graph Component */}
+            <GitGraph />
+          </div>
         );
 
       case 'search':

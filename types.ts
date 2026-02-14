@@ -34,3 +34,15 @@ export interface Theme {
 }
 
 export type ActivityTab = 'explorer' | 'search' | 'git' | 'terminal' | 'settings';
+
+export interface GitCommit {
+  id: string;
+  hash: string;
+  message: string;
+  author: string;
+  date: string;
+  branch: string;
+  color: string;
+  lane: number;
+  parents: string[];
+}

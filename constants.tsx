@@ -1,5 +1,5 @@
 
-import { FileNode, Theme } from './types';
+import { FileNode, Theme, GitCommit } from './types';
 import { PORTFOLIO_CONFIG } from './portfolio.config';
 
 export const THEMES: Theme[] = [
@@ -59,6 +59,63 @@ export const THEMES: Theme[] = [
     }
   },
   {
+    id: 'atom-one-light',
+    name: 'Atom One Light',
+    isLight: true,
+    colors: {
+      background: '#fafafa',
+      sidebar: '#f0f0f0',
+      activityBar: '#e5e5e5',
+      primary: '#4078f2',
+      editorBg: '#fafafa',
+      text: '#383a42',
+      comment: '#696c77',
+      string: '#50a14f',
+      keyword: '#a626a4',
+      variable: '#e45649',
+      type: '#c18401',
+      border: 'rgba(0,0,0,0.08)'
+    }
+  },
+  {
+    id: 'nord-light',
+    name: 'Nord Light',
+    isLight: true,
+    colors: {
+      background: '#eceff4',
+      sidebar: '#e5e9f0',
+      activityBar: '#d8dee9',
+      primary: '#88c0d0',
+      editorBg: '#eceff4',
+      text: '#2e3440',
+      comment: '#4c566a',
+      string: '#4f6b3e',
+      keyword: '#5e81ac',
+      variable: '#bf616a',
+      type: '#b48ead',
+      border: 'rgba(0,0,0,0.1)'
+    }
+  },
+  {
+    id: 'monokai-light',
+    name: 'Monokai Light',
+    isLight: true,
+    colors: {
+      background: '#fdfdfd',
+      sidebar: '#f5f5f5',
+      activityBar: '#eeeeee',
+      primary: '#d31a5e',
+      editorBg: '#ffffff',
+      text: '#272822',
+      comment: '#5f5a4b',
+      string: '#1c730a',
+      keyword: '#d31a5e',
+      variable: '#1075a3',
+      type: '#805000',
+      border: 'rgba(0,0,0,0.06)'
+    }
+  },
+  {
     id: 'solarized-light',
     name: 'Solarized Light',
     isLight: true,
@@ -68,8 +125,8 @@ export const THEMES: Theme[] = [
       activityBar: '#073642',
       primary: '#268bd2',
       editorBg: '#fdf6e3',
-      text: '#586e75',
-      comment: '#93a1a1',
+      text: '#073642',
+      comment: '#657b83',
       string: '#859900',
       keyword: '#859900',
       variable: '#268bd2',
@@ -88,7 +145,7 @@ export const THEMES: Theme[] = [
       primary: '#705697',
       editorBg: '#f2f2f2',
       text: '#333333',
-      comment: '#aaaaaa',
+      comment: '#707070',
       string: '#448c27',
       keyword: '#705697',
       variable: '#7a3e9d',
@@ -98,13 +155,115 @@ export const THEMES: Theme[] = [
   }
 ];
 
+export const MOCK_GIT_HISTORY: GitCommit[] = [
+  {
+    id: 'c7',
+    hash: 'a7b8c9d',
+    message: 'feat: add interactive terminal simulation',
+    author: 'John Doe',
+    date: '2 hours ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: ['c6']
+  },
+  {
+    id: 'c6',
+    hash: 'e5f6g7h',
+    message: 'merge: pull request #42 from feature/atomic-design',
+    author: 'John Doe',
+    date: '5 hours ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: ['c5', 'f2']
+  },
+  {
+    id: 'f2',
+    hash: 'i9j0k1l',
+    message: 'refactor: implement atomic components for UI consistency',
+    author: 'John Doe',
+    date: '1 day ago',
+    branch: 'feature/atomic-design',
+    color: '#50fa7b',
+    lane: 1,
+    parents: ['f1']
+  },
+  {
+    id: 'f1',
+    hash: 'm2n3o4p',
+    message: 'docs: update contribution guidelines',
+    author: 'John Doe',
+    date: '1 day ago',
+    branch: 'feature/atomic-design',
+    color: '#50fa7b',
+    lane: 1,
+    parents: ['c5']
+  },
+  {
+    id: 'c5',
+    hash: 'q5r6s7t',
+    message: 'fix: resolve theme switching flicker on mobile',
+    author: 'John Doe',
+    date: '2 days ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: ['c4']
+  },
+  {
+    id: 'c4',
+    hash: 'u8v9w0x',
+    message: 'chore: update dependency versions',
+    author: 'John Doe',
+    date: '3 days ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: ['c3']
+  },
+  {
+    id: 'c3',
+    hash: 'y1z2a3b',
+    message: 'feat: add markdown preview toggle',
+    author: 'John Doe',
+    date: '4 days ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: ['c2']
+  },
+  {
+    id: 'c2',
+    hash: 'd4e5f6g',
+    message: 'docs: initial project setup and readme',
+    author: 'John Doe',
+    date: '5 days ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: ['c1']
+  },
+  {
+    id: 'c1',
+    hash: 'h7i8j9k',
+    message: 'initial commit',
+    author: 'John Doe',
+    date: '1 week ago',
+    branch: 'main',
+    color: '#bd93f9',
+    lane: 0,
+    parents: []
+  }
+];
+
 export const INITIAL_FILES: FileNode[] = [
   {
     id: 'about',
     name: 'AboutMe.md',
     type: 'markdown',
     icon: 'description',
-    iconColor: 'text-orange-400',
+    iconColor: 'text-blue-400',
     path: 'PORTFOLIO > src > AboutMe.md',
     content: `# ${PORTFOLIO_CONFIG.name}
 ## ${PORTFOLIO_CONFIG.title} @ ${PORTFOLIO_CONFIG.company}
@@ -125,8 +284,8 @@ ${PORTFOLIO_CONFIG.about.philosophy}
     id: 'experience',
     name: 'Experience.json',
     type: 'json',
-    icon: 'code',
-    iconColor: 'text-yellow-400',
+    icon: 'data_object',
+    iconColor: 'text-yellow-500',
     path: 'PORTFOLIO > src > Experience.json',
     content: JSON.stringify({ work_history: PORTFOLIO_CONFIG.experience }, null, 2)
   },
@@ -134,8 +293,8 @@ ${PORTFOLIO_CONFIG.about.philosophy}
     id: 'skills',
     name: 'Skills.yaml',
     type: 'yaml',
-    icon: 'list_alt',
-    iconColor: 'text-primary',
+    icon: 'settings',
+    iconColor: 'text-purple-400',
     path: 'PORTFOLIO > src > Skills.yaml',
     content: `Technical_Skills:
   Frontend:
@@ -151,7 +310,7 @@ ${PORTFOLIO_CONFIG.about.philosophy}
     id: 'projects',
     name: 'Projects.md',
     type: 'markdown',
-    icon: 'terminal',
+    icon: 'description',
     iconColor: 'text-blue-400',
     path: 'PORTFOLIO > src > Projects.md',
     content: `# Featured Projects
@@ -165,8 +324,8 @@ ${PORTFOLIO_CONFIG.projects.map(p => `## ${p.name}
     id: 'readme',
     name: 'README.md',
     type: 'markdown',
-    icon: 'menu_book',
-    iconColor: 'text-blue-500',
+    icon: 'description',
+    iconColor: 'text-blue-400',
     path: 'PORTFOLIO > README.md',
     content: `# IDE Portfolio v1.5.0
 
@@ -192,8 +351,8 @@ You can customize all the content by editing \`portfolio.config.ts\`. To change 
     id: 'contributing',
     name: 'CONTRIBUTING.md',
     type: 'markdown',
-    icon: 'handshake',
-    iconColor: 'text-purple-400',
+    icon: 'description',
+    iconColor: 'text-blue-400',
     path: 'PORTFOLIO > CONTRIBUTING.md',
     content: `# Contributing to IDE Portfolio
 
