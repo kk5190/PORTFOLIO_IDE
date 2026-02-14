@@ -165,19 +165,60 @@ ${PORTFOLIO_CONFIG.projects.map(p => `## ${p.name}
     id: 'readme',
     name: 'README.md',
     type: 'markdown',
-    icon: 'info',
+    icon: 'menu_book',
     iconColor: 'text-blue-500',
     path: 'PORTFOLIO > README.md',
-    content: `# Welcome to my IDE Portfolio!
+    content: `# IDE Portfolio v1.5.0
 
-This is a developer-focused portfolio template built with React and Tailwind CSS.
-It's designed to look and feel like Visual Studio Code.
+This is a professional developer portfolio designed to simulate a modern Integrated Development Environment (IDE). 
 
-### How to browse:
-1. Click files in the **Explorer** to view my details.
-2. Use the **Activity Bar** on the left to switch views.
-3. Change the **Theme** in the Settings icon at the bottom left.
+### 🚀 Local Development
+To run this project on your own machine:
+1.  **Clone** this repository to your local drive.
+2.  **Serve** the root directory using any static server. 
+    - E.g., \`npx serve .\` or use the "Live Server" VS Code extension.
+3.  Open the provided URL in your browser.
 
-Feel free to "Star" this project if you find it cool!`
+### 🛠 Tech Stack
+- **React 19**: UI Composition
+- **Tailwind CSS**: Utility-first styling
+- **ES Modules**: Direct browser imports (no heavy build step)
+- **Material Symbols**: Sharp, consistent iconography
+
+### 🎨 Customization
+You can customize all the content by editing \`portfolio.config.ts\`. To change the IDE behavior, look into \`App.tsx\` and \`constants.tsx\`.`
+  },
+  {
+    id: 'contributing',
+    name: 'CONTRIBUTING.md',
+    type: 'markdown',
+    icon: 'handshake',
+    iconColor: 'text-purple-400',
+    path: 'PORTFOLIO > CONTRIBUTING.md',
+    content: `# Contributing to IDE Portfolio
+
+First off, thank you for considering contributing to this template! It's people like you that make the web a cooler place for developers.
+
+### 📝 Reporting Bugs
+- Check the issues tab to see if the bug has already been reported.
+- If not, open a new issue with a clear title and description of the problem.
+
+### 💡 Feature Requests
+- We welcome new IDE-like features! 
+- Ideas: Git Graph view, Debugger simulation, Search in files, etc.
+
+### 👨‍💻 Code Contributions
+1. Fork the repo.
+2. Create a feature branch.
+3. Ensure your code follows the **Atomic Design** principles used in this project.
+4. Submit a Pull Request with a detailed summary of your changes.
+
+### 🎨 Adding New Themes
+To add a theme:
+1. Open \`constants.tsx\`.
+2. Add a new object to the \`THEMES\` array.
+3. Define your colors using the \`Theme\` interface.
+
+Happy Coding!`
   }
 ];
