@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { ActivityTab } from '../types';
+import Icon from './atoms/Icon';
 
 interface ActivityBarProps {
   activeTab: ActivityTab;
@@ -8,10 +9,11 @@ interface ActivityBarProps {
 }
 
 const ActivityBar: React.FC<ActivityBarProps> = ({ activeTab, setActiveTab }) => {
-  const items: { id: ActivityTab; icon: string; label: string; badge?: number }[] = [
+  const items: { id: ActivityTab; icon: string; label: string; badge?: string }[] = [
     { id: 'explorer', icon: 'file_copy', label: 'Explorer' },
     { id: 'search', icon: 'search', label: 'Search' },
-    { id: 'git', icon: 'account_tree', label: 'Source Control', badge: 3 },
+    { id: 'git', icon: 'account_tree', label: 'Source Control' },
+    { id: 'copilot', icon: 'smart_toy', label: 'Copilot', badge: 'AI' },
     { id: 'terminal', icon: 'terminal', label: 'Terminal' },
   ];
 
@@ -30,9 +32,9 @@ const ActivityBar: React.FC<ActivityBarProps> = ({ activeTab, setActiveTab }) =>
           }`}
           title={item.label}
         >
-          <span className="material-icons-outlined text-2xl">{item.icon}</span>
+          <Icon name={item.icon} className="text-2xl" />
           {item.badge && (
-            <span className="absolute -top-1 -right-1 bg-primary text-background-dark text-[9px] font-bold px-1 rounded-full border border-black/10">
+            <span className="absolute -top-1 -right-2 bg-primary text-background-dark text-[7px] font-black px-1 rounded-sm border border-black/10">
               {item.badge}
             </span>
           )}
@@ -49,7 +51,7 @@ const ActivityBar: React.FC<ActivityBarProps> = ({ activeTab, setActiveTab }) =>
             }`}
             title={item.label}
           >
-            <span className="material-icons-outlined text-2xl">{item.icon}</span>
+            <Icon name={item.icon} className="text-2xl" />
           </div>
         ))}
       </div>

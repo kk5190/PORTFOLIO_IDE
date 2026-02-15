@@ -9,6 +9,14 @@ export interface FileNode {
   iconColor: string;
   content: string;
   path: string;
+  parentId?: string; // For recursive tree
+}
+
+export interface FolderNode {
+  id: string;
+  name: string;
+  parentId?: string;
+  isOpen?: boolean;
 }
 
 export interface ThemeColors {
@@ -33,7 +41,7 @@ export interface Theme {
   colors: ThemeColors;
 }
 
-export type ActivityTab = 'explorer' | 'search' | 'git' | 'terminal' | 'settings';
+export type ActivityTab = 'explorer' | 'search' | 'git' | 'terminal' | 'settings' | 'copilot';
 
 export interface GitCommit {
   id: string;

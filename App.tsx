@@ -9,30 +9,82 @@ import TabItem from './components/molecules/TabItem';
 import Breadcrumbs from './components/molecules/Breadcrumbs';
 import IDELayout from './components/templates/IDELayout';
 import Icon from './components/atoms/Icon';
+import CommandPalette, { CommandAction } from './components/organisms/CommandPalette';
 import { INITIAL_FILES, THEMES } from './constants';
 import { FileNode, Theme, ActivityTab } from './types';
 import { PORTFOLIO_CONFIG } from './portfolio.config';
 
 const App: React.FC = () => {
-  // Global State
   const [openFileIds, setOpenFileIds] = useState<string[]>(() => {
     const saved = localStorage.getItem('openFileIds');
-    return saved ? JSON.parse(saved) : ['readme', 'about'];
+    return saved ? JSON.parse(saved) : ['readme', 'about', 'experience'];
   });
   const [activeFileId, setActiveFileId] = useState<string | null>(() => {
-    return localStorage.getItem('activeFileId') || 'readme';
+    return localStorage.getItem('activeFileId') || 'experience';
   });
   const [currentTheme, setCurrentTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('themeId');
-    return THEMES.find(t => t.id === saved) || THEMES[0];
+    return THEMES.find(t => t.id === saved) || THEMES[1]; 
   });
 
   const [activeActivityTab, setActiveActivityTab] = useState<ActivityTab>('explorer');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
 
   const activeFile = INITIAL_FILES.find(f => f.id === activeFileId);
+
+  const actions = useMemo<CommandAction[]>(() => [
+    {
+      id: 'toggle-terminal',
+      name: 'View: Toggle Terminal',
+      icon: 'terminal',
+      category: 'View',
+      shortcut: 'Ctrl+J',
+      execute: () => setIsTerminalOpen(prev => !prev)
+    },
+    {
+      id: 'toggle-sidebar',
+      name: 'View: Toggle Primary Sidebar',
+      icon: 'side_navigation',
+      category: 'View',
+      shortcut: 'Ctrl+B',
+      execute: () => setIsSidebarOpen(prev => !prev)
+    },
+    {
+      id: 'toggle-preview',
+      name: 'Editor: Toggle Markdown Preview',
+      icon: 'visibility',
+      category: 'Editor',
+      execute: () => setIsPreviewMode(prev => !prev)
+    },
+    {
+      id: 'switch-explorer',
+      name: 'View: Show Explorer',
+      icon: 'file_copy',
+      category: 'View',
+      execute: () => { setActiveActivityTab('explorer'); setIsSidebarOpen(true); }
+    },
+    {
+      id: 'switch-search',
+      name: 'View: Show Search',
+      icon: 'search',
+      category: 'View',
+      execute: () => { setActiveActivityTab('search'); setIsSidebarOpen(true); }
+    },
+    {
+        id: 'next-theme',
+        name: 'System: Cycle Color Theme',
+        icon: 'palette',
+        category: 'System',
+        execute: () => {
+            const index = THEMES.findIndex(t => t.id === currentTheme.id);
+            const nextTheme = THEMES[(index + 1) % THEMES.length];
+            setCurrentTheme(nextTheme);
+        }
+    }
+  ], [currentTheme]);
 
   useEffect(() => {
     localStorage.setItem('openFileIds', JSON.stringify(openFileIds));
@@ -44,6 +96,23 @@ const App: React.FC = () => {
     } else {
       document.documentElement.classList.add('dark');
     }
+
+    const handleKeydown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'p') {
+        e.preventDefault();
+        setIsPaletteOpen(true);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'j') {
+        e.preventDefault();
+        setIsTerminalOpen(prev => !prev);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+        e.preventDefault();
+        setIsSidebarOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
   }, [openFileIds, activeFileId, currentTheme]);
 
   const handleFileSelect = (id: string) => {
@@ -77,9 +146,10 @@ const App: React.FC = () => {
     '--theme-variable': currentTheme.colors.variable,
     '--theme-type': currentTheme.colors.type,
     '--theme-border': currentTheme.colors.border,
+    '--scrollbar-thumb': currentTheme.isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
+    '--scrollbar-thumb-hover': currentTheme.isLight ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.2)',
   } as React.CSSProperties), [currentTheme]);
 
-  // Section: Header (Atomic-ish Organism)
   const Header = (
     <header className="h-9 bg-sidebar-dark border-b border-theme flex items-center px-4 justify-between text-xs opacity-60 flex-shrink-0">
       <div className="flex items-center gap-4">
@@ -97,13 +167,10 @@ const App: React.FC = () => {
           <span key={m} className="hover:opacity-100 cursor-pointer transition-opacity">{m}</span>
         ))}
       </div>
-      <div className="flex items-center gap-2">
-         <Icon name="notifications" className="text-sm cursor-pointer hover:opacity-100 transition-opacity" />
-      </div>
+      <Icon name="notifications" className="text-sm cursor-pointer opacity-60 hover:opacity-100" />
     </header>
   );
 
-  // Section: Editor Area (Organism)
   const Editor = (
     <div className="flex-1 flex flex-col min-h-0 bg-editor-bg" style={{ backgroundColor: 'var(--theme-editor-bg)' }}>
       <nav className="h-9 bg-sidebar-dark flex overflow-x-auto border-b border-theme no-scrollbar flex-shrink-0">
@@ -124,14 +191,14 @@ const App: React.FC = () => {
 
       {activeFile && (
         <div className="h-7 bg-background-dark px-4 flex items-center justify-between border-theme border-b flex-shrink-0">
-          <Breadcrumbs file={activeFile} />
+          <Breadcrumbs file={activeFile} onFileSelect={handleFileSelect} />
           {activeFile.type === 'markdown' && (
             <button 
               onClick={() => setIsPreviewMode(!isPreviewMode)}
-              className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold transition-all border ${isPreviewMode ? 'bg-primary text-background-dark border-primary' : 'border-theme opacity-60 hover:opacity-100'}`}
+              className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${isPreviewMode ? 'bg-primary text-background-dark border-primary' : 'border-theme opacity-60 hover:opacity-100'}`}
             >
               <Icon name={isPreviewMode ? 'code' : 'visibility'} className="text-xs" />
-              {isPreviewMode ? 'View Code' : 'Preview'}
+              {isPreviewMode ? 'Code' : 'Preview'}
             </button>
           )}
         </div>
@@ -141,9 +208,8 @@ const App: React.FC = () => {
         {activeFile ? (
           <CodeRenderer file={activeFile} isPreview={isPreviewMode} />
         ) : (
-          <div className="flex-1 h-full flex flex-col items-center justify-center opacity-10 pointer-events-none">
+          <div className="flex-1 h-full flex flex-col items-center justify-center opacity-10">
               <Icon name="code" className="text-[120px]" />
-              <p className="text-2xl font-display mt-4">Select a file to begin</p>
           </div>
         )}
       </div>
@@ -151,22 +217,14 @@ const App: React.FC = () => {
   );
 
   return (
-    <div style={themeVariables}>
-      <style>{`
-        .bg-background-dark { background-color: var(--theme-bg) !important; }
-        .bg-sidebar-dark { background-color: var(--theme-sidebar) !important; }
-        .bg-activity-bar { background-color: var(--theme-activity-bar) !important; }
-        .bg-primary { background-color: var(--theme-primary) !important; }
-        .border-theme { border-color: var(--theme-border) !important; }
-        .text-primary { color: var(--theme-primary) !important; }
-        .border-primary { border-color: var(--theme-primary) !important; }
-        .text-background-dark { color: var(--theme-bg) !important; }
-      `}</style>
-      
+    <div style={themeVariables} className="h-full">
       <IDELayout 
         header={Header}
         activityBar={<ActivityBar activeTab={activeActivityTab} setActiveTab={(tab) => {
-          if (tab === 'terminal') return setIsTerminalOpen(!isTerminalOpen);
+          if (tab === 'terminal') {
+            setIsTerminalOpen(prev => !prev);
+            return;
+          }
           if (activeActivityTab === tab && isSidebarOpen) setIsSidebarOpen(false);
           else { setActiveActivityTab(tab); setIsSidebarOpen(true); }
         }} />}
@@ -186,6 +244,14 @@ const App: React.FC = () => {
           activeFileType={activeFile?.type} 
           onTerminalToggle={() => setIsTerminalOpen(!isTerminalOpen)} 
         />}
+      />
+
+      <CommandPalette 
+        isOpen={isPaletteOpen} 
+        onClose={() => setIsPaletteOpen(false)} 
+        files={INITIAL_FILES} 
+        actions={actions}
+        onFileSelect={handleFileSelect} 
       />
     </div>
   );
