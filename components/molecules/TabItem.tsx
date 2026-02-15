@@ -15,9 +15,12 @@ const TabItem: React.FC<TabItemProps> = ({ file, isActive, onClick, onClose }) =
     <div
       onClick={onClick}
       className={`flex items-center px-4 gap-2 h-full text-xs md:text-sm cursor-pointer border-r border-theme transition-all whitespace-nowrap group ${
-        isActive ? 'bg-background-dark border-t-2 border-primary' : 'opacity-40 hover:opacity-100 hover:bg-black/5'
+        isActive ? 'border-t-2 border-primary' : 'opacity-40 hover:opacity-100 hover:bg-black/5'
       }`}
-      style={{ color: isActive ? 'var(--theme-text)' : undefined }}
+      style={{ 
+        color: isActive ? 'var(--theme-text)' : undefined,
+        backgroundColor: isActive ? 'var(--theme-editor-bg)' : 'transparent'
+      }}
     >
       <Icon name={file.icon} className={`text-xs md:text-sm ${file.iconColor}`} />
       <span>{file.name}</span>

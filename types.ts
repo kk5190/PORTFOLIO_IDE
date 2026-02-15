@@ -10,6 +10,7 @@ export interface FileNode {
   content: string;
   path: string;
   parentId?: string; // For recursive tree
+  gitStatus?: 'modified' | 'added' | 'deleted';
 }
 
 export interface FolderNode {

@@ -1,15 +1,15 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { PORTFOLIO_CONFIG } from '../portfolio.config';
 import Icon from './atoms/Icon';
 
 interface TerminalProps {
   onClose: () => void;
+  height: number;
 }
 
 type TerminalTab = 'problems' | 'output' | 'debug' | 'terminal';
 
-const Terminal: React.FC<TerminalProps> = ({ onClose }) => {
+const Terminal: React.FC<TerminalProps> = ({ onClose, height }) => {
   const [activeTab, setActiveTab] = useState<TerminalTab>('terminal');
   const [history, setHistory] = useState<string[]>([
     'Welcome to the Portfolio Terminal v1.1.0',
@@ -67,7 +67,7 @@ const Terminal: React.FC<TerminalProps> = ({ onClose }) => {
 
   const renderTerminal = () => (
     <div 
-      className="flex-1 overflow-y-auto p-4 font-mono no-scrollbar"
+      className="flex-1 overflow-y-auto p-4 font-mono custom-scrollbar"
       onClick={() => inputRef.current?.focus()}
     >
       {history.map((line, i) => (
@@ -90,7 +90,7 @@ const Terminal: React.FC<TerminalProps> = ({ onClose }) => {
   );
 
   const renderProblems = () => (
-    <div className="flex-1 p-4 overflow-y-auto text-xs opacity-60">
+    <div className="flex-1 p-4 overflow-y-auto text-xs opacity-60 custom-scrollbar">
       <div className="flex items-center gap-2 mb-2 text-red-400 font-bold">
         <Icon name="error" className="text-sm" />
         <span>0 Errors</span>
@@ -104,8 +104,8 @@ const Terminal: React.FC<TerminalProps> = ({ onClose }) => {
   );
 
   return (
-    <div className="h-64 bg-background-dark border-t border-theme flex flex-col z-10">
-      <div className="flex items-center justify-between px-4 h-9 border-b border-theme bg-sidebar-dark">
+    <div style={{ height: `${height}px` }} className="bg-background-dark border-t border-theme flex flex-col z-10 overflow-hidden">
+      <div className="flex items-center justify-between px-4 h-9 border-b border-theme bg-sidebar-dark transition-colors" style={{ backgroundColor: 'var(--theme-sidebar)' }}>
         <div className="flex items-center gap-4 h-full">
           {(['PROBLEMS', 'OUTPUT', 'DEBUG CONSOLE', 'TERMINAL'] as const).map(tab => {
             const tabId = tab.toLowerCase().split(' ')[0] as TerminalTab;
@@ -125,11 +125,11 @@ const Terminal: React.FC<TerminalProps> = ({ onClose }) => {
         <Icon name="close" className="text-sm opacity-60 hover:opacity-100 cursor-pointer" onClick={onClose} />
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-hidden flex flex-col">
+      <div ref={scrollRef} className="flex-1 overflow-hidden flex flex-col" style={{ backgroundColor: 'var(--theme-editor-bg)' }}>
         {activeTab === 'terminal' && renderTerminal()}
         {activeTab === 'problems' && renderProblems()}
-        {activeTab === 'output' && <div className="p-4 text-xs opacity-40 font-mono">No output to display.</div>}
-        {activeTab === 'debug' && <div className="p-4 text-xs opacity-40 font-mono italic">Debug Console is inactive.</div>}
+        {activeTab === 'output' && <div className="p-4 text-xs opacity-40 font-mono custom-scrollbar overflow-y-auto">No output to display.</div>}
+        {activeTab === 'debug' && <div className="p-4 text-xs opacity-40 font-mono italic custom-scrollbar overflow-y-auto">Debug Console is inactive.</div>}
       </div>
     </div>
   );

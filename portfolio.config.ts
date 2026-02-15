@@ -1,11 +1,12 @@
+
 export const PORTFOLIO_CONFIG = {
-  name: "Krishna Kumar Singh", // [cite: 1]
-  title: "Senior Software Engineer", // [cite: 206]
-  company: "Acquia", // [cite: 214]
-  location: "Varanasi, Uttar Pradesh, India", // [cite: 207]
-  email: "krishna.k.singh@outlook.com", // [cite: 3]
+  name: "Krishna Kumar Singh",
+  title: "Senior Software Engineer",
+  company: "Acquia",
+  location: "Varanasi, Uttar Pradesh, India",
+  email: "krishna.k.singh@outlook.com",
   github: "github.com/kk5190",
-  linkedin: "linkedin.com/in/krishnaksingh", // [cite: 193]
+  linkedin: "linkedin.com/in/krishnaksingh",
   twitter: "",
   
   about: {
@@ -14,42 +15,42 @@ export const PORTFOLIO_CONFIG = {
   },
 
   skills: {
-    frontend: ["Angular", "ReactJS", "HTML", "CSS", "JS with ES6", "Bootstrap", "Twig"], // [cite: 17, 18]
-    backend: ["PHP", "Drupal 9", "MySQL", "SQL", "Python", "Machine Learning Algorithms"], // [cite: 17, 196]
-    devops: ["Git", "Composer", "DDEV"], // [cite: 17, 18]
-    tools: ["VS Code", "Drush", "Jira", "NPM", "Putty"] // [cite: 17, 18]
+    frontend: ["Angular", "ReactJS", "HTML", "CSS", "JS with ES6", "Bootstrap", "Twig"],
+    backend: ["PHP", "Drupal 9", "MySQL", "SQL", "Python", "Machine Learning Algorithms"],
+    devops: ["Git", "Composer", "DDEV"],
+    tools: ["VS Code", "Drush", "Jira", "NPM", "Putty"]
   },
 
   experience: [
     {
-      company: "Acquia", // [cite: 20]
-      role: "Senior Software Engineer", // [cite: 216]
-      period: "08/2021 — Present", // [cite: 21]
+      company: "Acquia",
+      role: "Senior Software Engineer",
+      period: "08/2021 — Present",
       achievements: [
         "Currently architecting and developing Angular applications for micro-frontend environments.",
-        "Developed an Acquia Personalization Drupal module for integration with the Acquia Personalization Service[cite: 221].",
-        "Built a PHP client library which implements HMAC authentication for third parties to use Acquia Personalization content indexing services[cite: 41]."
+        "Developed an Acquia Personalization Drupal module for integration with the Acquia Personalization Service.",
+        "Built a PHP client library which implements HMAC authentication for third parties to use Acquia Personalization content indexing services."
       ]
     },
     {
-      company: "Promantus India Pvt Ltd", // [cite: 22]
-      role: "Senior Software Engineer", // [cite: 22]
-      period: "05/2019 — 07/2021", // [cite: 24]
+      company: "Promantus India Pvt Ltd",
+      role: "Senior Software Engineer",
+      period: "05/2019 — 07/2021",
       achievements: [
-        "Played a pivotal role in the architecture and development of a Drupal Site Building project as a Senior Software Engineer[cite: 51].",
-        "Integrated multiple third-party REST and SOAP APIs into both the Drupal frontend and backend[cite: 52].",
-        "Developed pages and components using React.js to support the partially decoupled Drupal architecture[cite: 55].",
-        "Mentored new developers to refine their Drupal skills and facilitated knowledge transfer[cite: 54]."
+        "Played a pivotal role in the architecture and development of a Drupal Site Building project as a Senior Software Engineer.",
+        "Integrated multiple third-party REST and SOAP APIs into both the Drupal frontend and backend.",
+        "Developed pages and components using React.js to support the partially decoupled Drupal architecture.",
+        "Mentored new developers to refine their Drupal skills and facilitated knowledge transfer."
       ]
     },
     {
-      company: "Group 10 Technologies", // [cite: 25]
-      role: "Software Engineer", // [cite: 25]
-      period: "05/2016 — 04/2019", // [cite: 26]
+      company: "Group 10 Technologies",
+      role: "Software Engineer",
+      period: "05/2016 — 04/2019",
       achievements: [
-        "Built the theme and several custom modules to construct a learning management system on a Drupal development team[cite: 63].",
-        "Upgraded and modernized outdated code bases to current development standards[cite: 240].",
-        "Provided production and customer support, and maintained existing Drupal 6 and 7 projects[cite: 241]."
+        "Built the theme and several custom modules to construct a learning management system on a Drupal development team.",
+        "Upgraded and modernized outdated code bases to current development standards.",
+        "Provided production and customer support, and maintained existing Drupal 6 and 7 projects."
       ]
     }
   ],
@@ -58,14 +59,14 @@ export const PORTFOLIO_CONFIG = {
     {
       name: "AI Powered Tourism Analytics",
       description: "A machine learning project leveraging data analysis to predict tourism trends.",
-      tech: ["Python", "Scikit-learn", "Machine Learning Algorithms"], // [cite: 196, 211]
+      tech: ["Python", "Scikit-learn", "Machine Learning Algorithms"],
       link: "github.com/kk5190/ai-powered-tourism-analytics"
     },
     {
-      name: "Acquia Personalization Module", // [cite: 35]
-      description: "Developed a Drupal 9 module to incorporate Acquia Personalization services[cite: 39].",
-      tech: ["Drupal 9", "PHP", "HMAC Auth"], // [cite: 35, 41]
-      link: "drupal.org/project/acquia_perz" // [cite: 148]
+      name: "Acquia Personalization Module",
+      description: "Developed a Drupal 9 module to incorporate Acquia Personalization services.",
+      tech: ["Drupal 9", "PHP", "HMAC Auth"],
+      link: "drupal.org/project/acquia_perz"
     },
     {
       name: "Acquia VWO",
